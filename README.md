@@ -2,7 +2,7 @@
 
 Static analysis tool for Python code, integrated as an [opencode](https://github.com/anomalyco/opencode) skill.
 
-Uses **ast** for structure extraction and **[jedi](https://github.com/davidhalter/jedi)** for references — no need to read entire files.
+Uses **ast** for structure extraction and **[jedi](https://github.com/davidhalter/jedi)**.
 
 ## What it does
 
