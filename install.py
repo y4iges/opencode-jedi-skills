@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Install script for opencode-jedi-analysis skill.
+Install script for opencode-jedi-skills.
 
 Copies SKILL.md and jedi_tool.py to ~/.config/opencode/skills/jedi-analysis/
 """
@@ -18,7 +18,7 @@ def install():
     skill_dir = get_skill_dir()
     script_dir = Path(__file__).parent
 
-    print(f"Installing opencode-jedi-analysis to {skill_dir}")
+    print(f"Installing opencode-jedi-skills to {skill_dir}")
 
     skill_dir.mkdir(parents=True, exist_ok=True)
 
