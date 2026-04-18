@@ -49,16 +49,6 @@ python jedi_tool.py members /path/to/module.py MyClass.my_method
 python jedi_tool.py refs /path/to/module.py 123 5
 ```
 
-## Example output
-
-```
-=== Bot (class, L25, 52 methods) ===
-
-  L  26  __init__(config=None)
-  L 414  process_candle(candle, timestamp, ...)
-  L 818  _check_volume_impulse_long(indicators, timestamp)
-```
-
 ## Why?
 
 Most language model code analysis tools require reading entire files. For a 2000-line file, that's 2000+ tokens just for structure.
