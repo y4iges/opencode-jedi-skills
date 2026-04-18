@@ -4,11 +4,47 @@
 #
 # ─────────────────────────────────────────────────────────────────────────────
 
+## Skill Cache — Persistence Layer
+
+Tools: `skill_save`, `skill_read`, `skill_list`, `skill_invalidate`
+
+Cache expensive analysis results to disk. Survives context compaction and session restarts.
+Source file mtimes are tracked — cached results auto-invalidate when files change.
+
+Workflow for any expensive analysis:
+1. `skill_read("key")` → if cached, use it
+2. If STALE or NOT_FOUND → run analysis
+3. `skill_save("key", result, sourceFiles="path/to/file.py")` → cache for reuse
+
 ## Python Code Analysis — MANDATORY `jedi_tool.py`
+
+### Execution model — PREFER INLINE, delegate only when parallel
+
+**Inline (default):** Run jedi_tool directly via bash during chain of thought. Check cache first.
+
+```
+1. skill_read("jedi:overview:") → hit? → use result, done
+2. Miss? → bash: python jedi_tool.py overview <file> → skill_save()
+3. Continue working — full context, zero duplicate tokens
+```
+
+**Delegated (only for parallel work):** Summon `@jedi` when you need analysis to run while you do other things. Results are cached and shared.
+
+### Cache key format (shared between main agent and @jedi)
+
+- `jedi:overview:`
+- `jedi:members::<name>`
+- `jedi:body::<line>`
+- `jedi:refs::<line>:<col>`
+- `jedi:search:<dir>:<name>`
+
+Always include `sourceFiles` param when saving so staleness is tracked.
+
+### jedi_tool.py location
 
 Tool: `python "C:/Users/<USER>/.config/opencode/skills/jedi-analysis/jedi_tool.py"`
 
-### MANDATORY — always use jedi_tool instead of `read` when:
+### When to use jedi_tool instead of `read`
 
 | Situation | Command | Why not `read` |
 |-----------|---------|----------------|
